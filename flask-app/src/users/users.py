@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, login_required
 import json
 from src import db
 
@@ -35,3 +35,9 @@ def get_customer(userID):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+@users.route('/profile')
+@login_required
+def profile():
+    # TODO: handle
+    # return render_template('profile.html', name=current_user.name)
