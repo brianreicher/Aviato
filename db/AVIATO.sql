@@ -1,53 +1,52 @@
 CREATE DATABASE Aviato;
 
-USE Aviato;
-
 CREATE USER 'webapp'@'%' IDENTIFIED BY 'abc123';
 
-GRANT ALL PRIVILEGES ON cool_db.* TO 'webapp'@'%';
+GRANT ALL PRIVILEGES ON Aviato.* TO 'webapp'@'%';
 
 FLUSH PRIVILEGES;
 
+USE Aviato;
 
 CREATE TABLE User(
-    userID INTEGER PRIMARY KEY AUTOINCREMENT,
-    gender VARCHAR(255) NOT NULL,
-    birthdate VARCHAR(255) NOT NULL,
-    firstName VARCHAR(255) NOT NULL,
-    lastName VARCHAR(255) NOT NULL,
-    phone VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    pemissions VARCHAR(255) NOT NULL,
-    FOREIGN KEY (buyerID) REFERENCES Buyer(buyerID),
-    FOREIGN KEY (sellerID) REFERENCES Seller(sellerID)
-);
+    `userID` INTEGER PRIMARY KEY,
+    `gender` VARCHAR(255) NOT NULL,
+    `birthdate` VARCHAR(255) NOT NULL,
+    `firstName` VARCHAR(255) NOT NULL,
+    `lastName` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `pemissions` VARCHAR(255) NOT NULL,
+    CONSTRAINT `user_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `Buyer` (`buyerID`),
+    CONSTRAINT `user_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `Seller` (`sellerID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE Buyer(
-    buyerID INTEGER PRIMARY KEY AUTOINCREMENT
-);
+    `buyerID` INTEGER PRIMARY KEY AUTOINCREMENT
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE Seller(
-    sellerID INTEGER PRIMARY KEY AUTOINCREMENT
-);
+    `sellerID` INTEGER PRIMARY KEY AUTOINCREMENT
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE Payment(
-    paymentNum INTEGER PRIMARY KEY AUTOINCREMENT,
-    bankaccount_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    amount FLOAT NOT NULL,
-    types VARCHAR(255) NOT NULL,
-    admin_message VARCHAR(255) NOT NULL,
-    FOREIGN KEY (bidID) REFERENCES Bid(bidID),
-    FOREIGN KEY (buyerID) REFERENCES Buyer(buyerID),
-    FOREIGN KEY (sellerID) REFERENCES Seller(sellerID)
-);
+    `paymentNum` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `bankaccount_ID` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `amount` FLOAT NOT NULL,
+    `types` VARCHAR(255) NOT NULL,
+    `admin_message` VARCHAR(255) NOT NULL,
+    CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `Bid` (`bidID`),
+    CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `Buyer` (`buyerID`),
+    CONSTRAINT `payment_ibfk_3` FOREIGN KEY (`sellerID`) REFERENCES `Seller` (`sellerID`)
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE Bank(
     bankaccount_ID INTEGER PRIMARY KEY AUTOINCREMENT,
     location VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (paymentNum) REFERENCES Payment(paymentNum),
-    FOREIGN KEY (bankaccount_ID) REFERENCES Payment(bankaccount_ID)
+    CONSTRAINT `bank_ibfk_1` FOREIGN KEY (`paymentNum`) REFERENCES `Payment` (`paymentNum`),
+    CONSTRAINT `bank_ibfk_2` FOREIGN KEY (`bankaccount_ID`) REFERENCES `Payment` (`bankaccount_ID`),
 );
 
 CREATE TABLE Bid(
