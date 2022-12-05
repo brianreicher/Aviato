@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, render_template
 import json
 from src import db
-
+import random
 
 users = Blueprint('users', __name__)
 
@@ -35,3 +35,25 @@ def get_customer(userID):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+@users.route('/users/add-user')
+def add_form():
+    return render_template('add_user.html')
+
+
+# Add a new user
+@users.route('/users/add-user', methods=['POST'])
+def add_customer():
+    cursor = db.get_db().cursor()
+    gender: str = request.form['gender']
+    firstName: str = request.form['first']
+    lastName: str = request.form['last']
+    phone: str = request.form['phone']
+    email: str = request.form['email']
+    birthdate: str = request.form['bdate']
+    permissions:str = 'base_user'
+    userID = buyerID= sellerID = 100 + random.randint(100,10000)
+    cursor.execute(f'insert into buyer (buyerID) values ({buyerID})')
+    cursor.execute(f'insert into seller (sellerID) values ({sellerID})')
+    cursor.execute(f'insert into user (userID, gender, birthdate, firstName, lastName, phone, email, permissions, buyerID, sellerID) values ({userID}, {gender}, {birthdate}, {firstName}, {lastName}, {phone}, {email}, {permissions}, {buyerID}, {sellerID});')
+    return (f'<h1>Added new user {firstName} {lastName}')

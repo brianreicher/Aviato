@@ -28,8 +28,9 @@ CREATE TABLE `user`(
     `buyerID` int(11) NOT NULL,
     `sellerID` int(11) NOT NULL,
     PRIMARY KEY (`userID`),
-    CONSTRAINT `user_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`),
-    CONSTRAINT `user_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`)
+    CONSTRAINT `user_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `user_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`)ON UPDATE cascade ON DELETE restrict
+
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `buyer`(
@@ -54,9 +55,9 @@ CREATE TABLE `payment`(
     `bidID` int(11) NOT NULL,
     PRIMARY KEY (`paymentNum`),
     KEY `bankaccount_ID` (`bankaccount_ID`),
-    CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`),
-    CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`),
-    CONSTRAINT `payment_ibfk_3` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`)
+    CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `payment_ibfk_3` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `bank`(
@@ -66,8 +67,8 @@ CREATE TABLE `bank`(
     `paymentNum` int(11) NOT NULL,
     `bankaccount_ID` int(11),
     PRIMARY KEY (`bankID`),
-    CONSTRAINT `bank_ibfk_1` FOREIGN KEY (`paymentNum`) REFERENCES `payment` (`paymentNum`),
-    CONSTRAINT `bank_ibfk_2` FOREIGN KEY (`bankaccount_ID`) REFERENCES `paymentNum` (`bankaccount_ID`)
+    CONSTRAINT `bank_ibfk_1` FOREIGN KEY (`paymentNum`) REFERENCES `payment` (`paymentNum`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `bank_ibfk_2` FOREIGN KEY (`bankaccount_ID`) REFERENCES `paymentNum` (`bankaccount_ID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `bid`(
@@ -79,8 +80,8 @@ CREATE TABLE `bid`(
     `buyerID` int(11) NOT NULL,
     `trade_ID` int(11) NOT NULL,
     PRIMARY KEY (`bidID`),
-    CONSTRAINT `bid_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyerID` (`buyerID`),
-    CONSTRAINT `bid_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`)
+    CONSTRAINT `bid_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyerID` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `bid_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `trade`(
@@ -90,23 +91,23 @@ CREATE TABLE `trade`(
     `buyerID` int(11) NOT NULL,
     `sellerID` int(11) NOT NULL,
     PRIMARY KEY (`trade_ID`),
-    CONSTRAINT `trade_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`),
-    CONSTRAINT `trade_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`)
+    CONSTRAINT `trade_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `trade_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `direct_buy`(
     `trade_ID` int(11) NOT NULL,
     `buyerID` int(11) NOT NULL,
-    CONSTRAINT `direct_buy_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`),
-    CONSTRAINT `direct_buy_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`),
+    CONSTRAINT `direct_buy_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `direct_buy_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
     autobuy_price int(11) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flight_trades`(
     `trade_ID` int(11) NOT NULL,
     `tripID` int(11) NOT NULL,
-    CONSTRAINT `flight_trades_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`),
-    CONSTRAINT `flight_trades_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`)
+    CONSTRAINT `flight_trades_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flight_trades_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flights`(
@@ -121,11 +122,11 @@ CREATE TABLE `flights`(
     `portfolioID` int(11) NOT NULL,
     `adminID` int(11) NOT NULL,
     PRIMARY KEY (`tripID`),
-    CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`),
-    CONSTRAINT `flights_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`),
-    CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`),
-    CONSTRAINT `flights_ibfk_4` FOREIGN KEY (`portfolioID`) REFERENCES `flights_portfolio` (`portfolioID`),
-    CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`)
+    CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flights_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flights_ibfk_4` FOREIGN KEY (`portfolioID`) REFERENCES `flights_portfolio` (`portfolioID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flight_portfolio` (
@@ -134,8 +135,8 @@ CREATE TABLE `flight_portfolio` (
     PRIMARY KEY (`portfolioID`),
     `adminID` int(11) NOT NULL,
     `userID` int(11) NOT NULL,
-    CONSTRAINT `flight_portfolio_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`),
-    CONSTRAINT `flight_portfolio_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
+    CONSTRAINT `flight_portfolio_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `flight_portfolio_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `departures`(
@@ -171,7 +172,7 @@ CREATE TABLE `departure_times`(
     `land` DATETIME NOT NULL,
     `d_num` int(11) NOT NULL,
     PRIMARY KEY(`takeoff`, `land`),
-    CONSTRAINT `departure_times_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`)
+    CONSTRAINT `departure_times_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `return_times`(
@@ -179,23 +180,23 @@ CREATE TABLE `return_times`(
     `land` DATETIME NOT NULL,
     `r_num` int(11) NOT NULL,
     PRIMARY KEY(`takeoff`, `land`),
-    CONSTRAINT `return_times_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`)
+    CONSTRAINT `return_times_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `return_flights`(
     `r_num` int(11) NOT NULL,
     `tripID` int(11) NOT NULL,
     PRIMARY KEY (`tripID`),
-    CONSTRAINT `return_flights_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`),
-    CONSTRAINT `return_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`)
+    CONSTRAINT `return_flights_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `return_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `departing_flights`(
     `d_num` int(11) NOT NULL,
     `tripID` int(11) NOT NULL,
     PRIMARY KEY (`tripID`),
-    CONSTRAINT `departing_flights_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`),
-    CONSTRAINT `departing_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`)
+    CONSTRAINT `departing_flights_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `departing_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `user_login`(
@@ -204,7 +205,7 @@ CREATE TABLE `user_login`(
     `password` VARCHAR(255) NOT NULL,
     `userID` int(11) NOT NULL,
     PRIMARY KEY (`loginID`),
-    CONSTRAINT `user_login_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
+    CONSTRAINT `user_login_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `admin_login`(
@@ -213,7 +214,7 @@ CREATE TABLE `admin_login`(
     `password` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`loginID`),
     `adminID` int(11) NOT NULL,
-    CONSTRAINT `admin_login_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`)
+    CONSTRAINT `admin_login_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `admin`(
@@ -234,8 +235,8 @@ CREATE TABLE `customer_support`(
     PRIMARY KEY (`complaintID`),
     `userID` int(11) NOT NULL,
     `adminID` int(11) NOT NULL,
-    CONSTRAINT `customer_support_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`),
-    CONSTRAINT `customer_support_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`)
+    CONSTRAINT `customer_support_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict,
+    CONSTRAINT `customer_support_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 );
 
 insert into user (userID, gender, firstName, lastName, phone, email, permissions, buyerID, sellerID) values (1, 'Male', 'Bobby', 'Poll', '690-155-9611', 'bpoll0@mit.edu', 'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.', 1, 1);
