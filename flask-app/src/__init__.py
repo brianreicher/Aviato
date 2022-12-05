@@ -48,6 +48,5 @@ def create_app():
     app.register_blueprint(users,   url_prefix='/usr')
     app.register_blueprint(departures,    url_prefix='/dep')
     app.register_blueprint(returns,    url_prefix='/ret')
-    app.register_blueprint(auth,    url_prefix='/auth')
 
     return app
