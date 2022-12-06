@@ -3,16 +3,16 @@ import json
 from src import db
 
 
-departures = Blueprint('departures', __name__)
+flights = Blueprint('flights', __name__)
 
 # Get all the products from the database
-@departures.route('/departing-flights', methods=['GET'])
+@flights.route('/flights', methods=['GET'])
 def get_products():
     # get a cursor object from the database
     cursor = db.get_db().cursor()
 
     # use cursor to query the database for a list of products
-    cursor.execute('select * from departures')
+    cursor.execute('select * from departures, returns')
 
     # grab the column headers from the returned data
     column_headers = [x[0] for x in cursor.description]

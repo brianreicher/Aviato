@@ -17,7 +17,7 @@ FLUSH PRIVILEGES;
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`(
-    `userID` int(11) NOT NULL,
+    `userID` varchar(50) NOT NULL,
     `gender` varchar(50) NOT NULL,
     `birthdate` varchar(50) NOT NULL,
     `firstName` varchar(50) NOT NULL,
@@ -25,8 +25,8 @@ CREATE TABLE `user`(
     `phone` varchar(50) NOT NULL,
     `email` varchar(50) NOT NULL,
     `permissions` varchar(50) NOT NULL,
-    `buyerID` int(11) NOT NULL,
-    `sellerID` int(11) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
+    `sellerID` varchar(50) NOT NULL,
     PRIMARY KEY (`userID`),
     CONSTRAINT `user_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `user_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`)ON UPDATE cascade ON DELETE restrict
@@ -34,25 +34,25 @@ CREATE TABLE `user`(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `buyer`(
-    `buyerID` int(11) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
     PRIMARY KEY (`buyerID`)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `seller`(
-    `sellerID` int(11) NOT NULL,
+    `sellerID` varchar(50) NOT NULL,
     PRIMARY KEY (`sellerID`)
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE `payment`(
-    `paymentNum` int(11) NOT NULL,
-    `bankaccount_ID` int(11) NOT NULL,
+    `paymentNum` varchar(50) NOT NULL,
+    `bankaccount_ID` varchar(50) NOT NULL,
     `amount` decimal(10,2) NOT NULL,
     `types` VARCHAR(255) NOT NULL,
     `admin_message` VARCHAR(255) NOT NULL,
-    `sellerID` int(11) NOT NULL,
-    `buyerID` int(11) NOT NULL,
-    `bidID` int(11) NOT NULL,
+    `sellerID` varchar(50) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
+    `bidID` varchar(50) NOT NULL,
     PRIMARY KEY (`paymentNum`),
     KEY `bankaccount_ID` (`bankaccount_ID`),
     CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`) ON UPDATE cascade ON DELETE restrict,
@@ -61,66 +61,66 @@ CREATE TABLE `payment`(
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `bank`(
-    `bankID` int(11) NOT NULL,
+    `bankID` varchar(50) NOT NULL,
     `location` VARCHAR(255) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
-    `paymentNum` int(11) NOT NULL,
-    `bankaccount_ID` int(11),
+    `paymentNum` varchar(50) NOT NULL,
+    `bankaccount_ID` varchar(50),
     PRIMARY KEY (`bankID`),
     CONSTRAINT `bank_ibfk_1` FOREIGN KEY (`paymentNum`) REFERENCES `payment` (`paymentNum`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `bank_ibfk_2` FOREIGN KEY (`bankaccount_ID`) REFERENCES `paymentNum` (`bankaccount_ID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `bid`(
-    `bidID` int(11) NOT NULL,
+    `bidID` varchar(50) NOT NULL,
     `bidType` VARCHAR(255) NOT NULL,
     `submit` boolean NOT NULL,
     `expirationDate` DATETIME NOT NULL,
     `status` VARCHAR(255) NOT NULL,
-    `buyerID` int(11) NOT NULL,
-    `trade_ID` int(11) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
+    `trade_ID` varchar(50) NOT NULL,
     PRIMARY KEY (`bidID`),
     CONSTRAINT `bid_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyerID` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `bid_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `trade`(
-    `trade_ID` int(11) NOT NULL,
+    `trade_ID` varchar(50) NOT NULL,
     `date` DATETIME NOT NULL,
     `price` VARCHAR(255) NOT NULL,
-    `buyerID` int(11) NOT NULL,
-    `sellerID` int(11) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
+    `sellerID` varchar(50) NOT NULL,
     PRIMARY KEY (`trade_ID`),
     CONSTRAINT `trade_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `trade_ibfk_2` FOREIGN KEY (`sellerID`) REFERENCES `seller` (`sellerID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `direct_buy`(
-    `trade_ID` int(11) NOT NULL,
-    `buyerID` int(11) NOT NULL,
+    `trade_ID` varchar(50) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
     CONSTRAINT `direct_buy_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `direct_buy_ibfk_2` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
-    autobuy_price int(11) NOT NULL
+    autobuy_price varchar(50) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flight_trades`(
-    `trade_ID` int(11) NOT NULL,
-    `tripID` int(11) NOT NULL,
+    `trade_ID` varchar(50) NOT NULL,
+    `tripID` varchar(50) NOT NULL,
     CONSTRAINT `flight_trades_ibfk_1` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `flight_trades_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flights`(
-    `tripID` int(11) NOT NULL,
+    `tripID` varchar(50) NOT NULL,
     `for_sale` BOOLEAN NOT NULL,
     `datePosted` DATETIME NOT NULL,
     `airline_message` VARCHAR(255) NOT NULL,
     `special_requests` VARCHAR(255) NOT NULL,
-    `bidID` int(11) NOT NULL,
-    `trade_ID` int(11) NOT NULL,
-    `buyerID` int(11) NOT NULL,
-    `portfolioID` int(11) NOT NULL,
-    `adminID` int(11) NOT NULL,
+    `bidID` varchar(50) NOT NULL,
+    `trade_ID` varchar(50) NOT NULL,
+    `buyerID` varchar(50) NOT NULL,
+    `portfolioID` varchar(50) NOT NULL,
+    `adminID` varchar(50) NOT NULL,
     PRIMARY KEY (`tripID`),
     CONSTRAINT `flights_ibfk_1` FOREIGN KEY (`bidID`) REFERENCES `bid` (`bidID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `flights_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
@@ -130,17 +130,17 @@ CREATE TABLE `flights`(
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flight_portfolio` (
-    `portfolioID` int(11) NOT NULL,
+    `portfolioID` varchar(50) NOT NULL,
     `portfolio_name` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`portfolioID`),
-    `adminID` int(11) NOT NULL,
-    `userID` int(11) NOT NULL,
+    `adminID` varchar(50) NOT NULL,
+    `userID` varchar(50) NOT NULL,
     CONSTRAINT `flight_portfolio_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `flight_portfolio_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `departures`(
-    `d_num` int(11) NOT NULL,
+    `d_num` varchar(50) NOT NULL,
     `date_purchased` DATETIME NOT NULL,
     `airline` VARCHAR(255) NOT NULL,
     `country` VARCHAR(255) NOT NULL,
@@ -154,7 +154,7 @@ CREATE TABLE `departures`(
 );
 
 CREATE TABLE `returns`(
-    `r_num` int(11) NOT NULL,
+    `r_num` varchar(50) NOT NULL,
     `date_purchased` DATETIME NOT NULL,
     `airline` VARCHAR(255) NOT NULL,
     `country` VARCHAR(255) NOT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE `returns`(
 CREATE TABLE `departure_times`(
     `takeoff` DATETIME NOT NULL,
     `land` DATETIME NOT NULL,
-    `d_num` int(11) NOT NULL,
+    `d_num` varchar(50) NOT NULL,
     PRIMARY KEY(`takeoff`, `land`),
     CONSTRAINT `departure_times_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`) ON UPDATE cascade ON DELETE restrict
 );
@@ -178,47 +178,47 @@ CREATE TABLE `departure_times`(
 CREATE TABLE `return_times`(
     `takeoff` DATETIME NOT NULL,
     `land` DATETIME NOT NULL,
-    `r_num` int(11) NOT NULL,
+    `r_num` varchar(50) NOT NULL,
     PRIMARY KEY(`takeoff`, `land`),
     CONSTRAINT `return_times_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `return_flights`(
-    `r_num` int(11) NOT NULL,
-    `tripID` int(11) NOT NULL,
+    `r_num` varchar(50) NOT NULL,
+    `tripID` varchar(50) NOT NULL,
     PRIMARY KEY (`tripID`),
     CONSTRAINT `return_flights_ibfk_1` FOREIGN KEY (`r_num`) REFERENCES `returns` (`r_num`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `return_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `departing_flights`(
-    `d_num` int(11) NOT NULL,
-    `tripID` int(11) NOT NULL,
+    `d_num` varchar(50) NOT NULL,
+    `tripID` varchar(50) NOT NULL,
     PRIMARY KEY (`tripID`),
     CONSTRAINT `departing_flights_ibfk_1` FOREIGN KEY (`d_num`) REFERENCES `departures` (`d_num`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `departing_flights_ibfk_2` FOREIGN KEY (`tripID`) REFERENCES `flights` (`tripID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `user_login`(
-    `loginID` int(11) NOT NULL,
+    `loginID` varchar(50) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    `userID` int(11) NOT NULL,
+    `userID` varchar(50) NOT NULL,
     PRIMARY KEY (`loginID`),
     CONSTRAINT `user_login_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `admin_login`(
-    `loginID` int(11) NOT NULL,
+    `loginID` varchar(50) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`loginID`),
-    `adminID` int(11) NOT NULL,
+    `adminID` varchar(50) NOT NULL,
     CONSTRAINT `admin_login_ibfk_1` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE `admin`(
-    `adminID` int(11) NOT NULL,
+    `adminID` varchar(50) NOT NULL,
     `birthdate` VARCHAR(255) NOT NULL,
     `firstName` VARCHAR(255) NOT NULL,
     `lastName` VARCHAR(255) NOT NULL,
@@ -230,11 +230,11 @@ CREATE TABLE `admin`(
 );
 
 CREATE TABLE `customer_support`(
-    `complaintID` int(11) NOT NULL,
+    `complaintID` varchar(50) NOT NULL,
     `message` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`complaintID`),
-    `userID` int(11) NOT NULL,
-    `adminID` int(11) NOT NULL,
+    `userID` varchar(50) NOT NULL,
+    `adminID` varchar(50) NOT NULL,
     CONSTRAINT `customer_support_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `customer_support_ibfk_2` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 );

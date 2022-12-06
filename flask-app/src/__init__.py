@@ -27,13 +27,12 @@ def create_app():
     # Import the various routes
     from src.views import views
     from src.users.users  import users
-    from src.departures.departures import departures
-    from src.returns.returns import returns
+    from src.flights.flights import flights
+
 
     # Register the routes that we just imported so they can be properly handled
     app.register_blueprint(views,       url_prefix='/classic')
     app.register_blueprint(users,   url_prefix='/usr')
-    app.register_blueprint(departures,    url_prefix='/dep')
-    app.register_blueprint(returns,    url_prefix='/ret')
+    app.register_blueprint(flights, url_prefix='/fly')
 
     return app

@@ -2,6 +2,9 @@ from flask import Blueprint, request, jsonify, make_response, render_template
 import json
 from src import db
 import random
+import datetime
+from flaskext.mysql import MySQL
+
 
 users = Blueprint('users', __name__)
 
@@ -9,8 +12,7 @@ users = Blueprint('users', __name__)
 @users.route('/users', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
-    cursor.execute('select userID, firstName,\
-        lastName from user')
+    cursor.execute('select * from user')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -36,6 +38,8 @@ def get_customer(userID):
     the_response.mimetype = 'application/json'
     return the_response
 
+
+# new user form
 @users.route('/users/add-user')
 def add_form():
     return render_template('add_user.html')
@@ -51,9 +55,15 @@ def add_customer():
     phone: str = request.form['phone']
     email: str = request.form['email']
     birthdate: str = request.form['bdate']
-    permissions:str = 'base_user'
+    permissions: str = 'base_user'
     userID = buyerID= sellerID = 100 + random.randint(100,10000)
     cursor.execute(f'insert into buyer (buyerID) values ({buyerID})')
     cursor.execute(f'insert into seller (sellerID) values ({sellerID})')
-    cursor.execute(f'insert into user (userID, gender, birthdate, firstName, lastName, phone, email, permissions, buyerID, sellerID) values ({userID}, {gender}, {birthdate}, {firstName}, {lastName}, {phone}, {email}, {permissions}, {buyerID}, {sellerID});')
-    return (f'<h1>Added new user {firstName} {lastName}')
+    insert_stmt: str = (
+                        " INSERT INTO user (userID, gender, birthdate, firstName, lastName, phone, email, permissions, buyerID, sellerID) "
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                        )
+    data = (int(userID), gender, birthdate, firstName, lastName, phone, email, permissions, int(buyerID), int(sellerID))
+    cursor.execute(insert_stmt, data)
+    db.get_db().commit()
+    return (f'<h1>Added new user {firstName} {lastName}: userID {userID}')
