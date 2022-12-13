@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response, render_template
+from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from src import db
 import random
@@ -24,10 +24,10 @@ def get_customers():
     return the_response
 
 # Get customer detail for customer with particular userID
-@users.route('/users/<userID>', methods=['GET'])
+@users.route('/users/profile/<userID>', methods=['GET'])
 def get_customer(userID):
     cursor = db.get_db().cursor()
-    cursor.execute('select * from user where userID = {0}'.format(userID))
+    cursor.execute('select * from user where userID = {userID}').format(userID)
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -39,15 +39,10 @@ def get_customer(userID):
     return the_response
 
 
-# new user form
-@users.route('/users/add-user')
-def add_form():
-    return render_template('add_user.html')
-
-
 # Add a new user
 @users.route('/users/add-user', methods=['POST'])
 def add_customer():
+    current_app.logger.info(request.form)
     cursor = db.get_db().cursor()
     gender: str = request.form['gender']
     firstName: str = request.form['first']
@@ -67,3 +62,34 @@ def add_customer():
     cursor.execute(insert_stmt, data)
     db.get_db().commit()
     return (f'<h1>Added new user {firstName} {lastName}: userID {userID}')
+
+
+# shows all portflios a user has access to
+@users.route('/users/portfolios')
+def get_portfolios():
+    cursor = db.get_db().cursor()
+    cursor.execute('select portfolioID, portfolio_name from flight_portfolio')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+# shows all users for login
+@users.route('/users/login-user')
+def get_logins():
+    cursor = db.get_db().cursor()
+    cursor.execute('select userID as label, userID as value from user')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
