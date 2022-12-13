@@ -2,11 +2,11 @@ from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from src import db
 import random
-
+import datetime
 
 flights = Blueprint('flights', __name__)
 
-# Get all the products from the database
+# view all flights
 @flights.route('/flights', methods=['GET'])
 def get_products():
     # get a cursor object from the database
@@ -33,9 +33,9 @@ def get_products():
     return jsonify(json_data)
 
 
-# Add a new flight
-@flights.route('/flights/add-flight,<user_ID>', methods=['POST'])
-def add_flight(user_ID):
+# Add a new flight to a specified user and portfolio
+@flights.route('/flights/add-flight/<user_ID>/<portfolioID>', methods=['POST'])
+def add_flight(user_ID, portfolioID):
     current_app.logger.info(request.form)
     cursor = db.get_db().cursor()
 
@@ -54,6 +54,7 @@ def add_flight(user_ID):
     for_sale = request.form['for_sale']
     takeoff = request.form['takeoff']
     land = request.form['land']
+    # date_posted = datetime TODO
 
     special_requests = request.form['special_requests']
     """
@@ -67,13 +68,13 @@ def add_flight(user_ID):
         # "tripID": "22"
     """
 
-    idNum: int =random.randint(100,10000)
+    idNum: int = random.randint(100,100000)
 
     insert_stmt: str = (
-                        f" INSERT INTO flights (date_purchased, airline, country, continent, is_layover, airport_code, purchased_price, current_price, asking_price, for_sale) "
-                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                        f" INSERT INTO flights (tripID, for_sale, datePosted, airline_message, special_requests, bidID, trade_ID, buyerID, portfolioID, adminID, date_purchased, airline, is_layover, depart_airport, arrive_airport, purchased_price, current_price, asking_price, takeoff, land)"
+                        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         )
-    data: tuple = (idNum, date_purchased, airline, country, continent, is_layover, airport_code, purchased_price, current_price, asking_price, for_sale)
+    data: tuple = (idNum, for_sale, )
     cursor.execute(insert_stmt, data)
     db.get_db().commit()
     return (f'<h1>Added new flight: {airline} {depart_airport} -> {arrive_airport}: id={idNum}')
@@ -99,7 +100,7 @@ def get_user_flights(buyer_ID):
     return jsonify(json_data)
 
 
-# Get all flights associated with a given user
+# Get all airlines accesible for dropdown labels
 @flights.route('/flights/airlines', methods=['GET'])
 def get_airlines():
     # get a cursor object from the database

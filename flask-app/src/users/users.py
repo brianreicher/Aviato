@@ -27,7 +27,7 @@ def get_customers():
 @users.route('/users/profile/<userID>', methods=['GET'])
 def get_customer(userID):
     cursor = db.get_db().cursor()
-    cursor.execute('select * from user where userID = {userID}').format(userID)
+    cursor.execute(f'select * from user where userID = {userID}')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -51,9 +51,8 @@ def add_customer():
     email: str = request.form['email']
     birthdate: str = request.form['bdate']
     permissions: str = 'base_user'
-    userID = buyerID= sellerID = 100 + random.randint(100,10000)
-    cursor.execute(f'insert into buyer (buyerID) values ({buyerID})')
-    cursor.execute(f'insert into seller (sellerID) values ({sellerID})')
+    buyerID= sellerID = userID = random.randint(100,10000)
+
     insert_stmt: str = (
                         " INSERT INTO user (userID, gender, birthdate, firstName, lastName, phone, email, permissions, buyerID, sellerID) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -65,10 +64,10 @@ def add_customer():
 
 
 # shows all portflios a user has access to
-@users.route('/users/portfolios')
-def get_portfolios():
+@users.route('/users/portfolios/<userID>', methods=['GET'])
+def get_portfolios(userID):
     cursor = db.get_db().cursor()
-    cursor.execute('select portfolioID, portfolio_name from flight_portfolio')
+    cursor.execute(f'select portfolioID as value, portfolioID as label from flight_portfolio where userID={userID}')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
