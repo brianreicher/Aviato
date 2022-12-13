@@ -32,14 +32,17 @@ def get_products():
 
     return jsonify(json_data)
 
-"""
-# Add a new user
+
+# Add a new flight
 @flights.route('/flights/add-flight', methods=['POST'])
 def add_flight():
     cursor = db.get_db().cursor()
 
     date_purchased: str = request.form['date_purchased']
     airline = request.form['airline']
+    arrive_airport = request.form['arrive_airport']
+    depart_airport = request.form['depart_airport']
+
     country = request.form['country']
     continent = request.form['continent']
     is_layover = request.form['is_layover']
@@ -48,23 +51,30 @@ def add_flight():
     current_price = request.form['current_price']
     asking_price = request.form['asking_price']
     for_sale = request.form['for_sale']
+    takeoff = request.form['takeoff']
+    land = request.form['land']
 
-    dep_ret: str = request.form['dep_ret'].lower()
-    
-    id_tag = 'r_num'
+    special_requests = request.form['special_requests']
+    """
+        # "adminID": "60",
 
-    if dep_ret == 'departures':
-        id_tag = 'd_num'
+        # "bidID": "83",
+        # "buyerID": "63",
+        # "datePosted": "Sun, 09 Jan 2022 18:37:43 GMT",
+        # "date_purchased": "Fri, 18 Nov 2022 04:07:46 GMT",
+        # "portfolioID": "93",
+        # "trade_ID": "47",
+        # "tripID": "22"
+    """
 
 
     idNum: int =random.randint(100,10000)
 
     insert_stmt: str = (
-                        f" INSERT INTO {dep_ret} ({id_tag}, date_purchased, airline, country, continent, is_layover, airport_code, purchased_price, current_price, asking_price, for_sale) "
+                        f" INSERT INTO flights date_purchased, airline, country, continent, is_layover, airport_code, purchased_price, current_price, asking_price, for_sale) "
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         )
     data: tuple = (idNum, date_purchased, airline, country, continent, is_layover, airport_code, purchased_price, current_price, asking_price, for_sale)
     cursor.execute(insert_stmt, data)
     db.get_db().commit()
-    return (f'<h1>Added new flight {airline} {airport_code}: id={idNum}')
-"""
+    return (f'<h1>Added new flight: {airline} {depart_airport} -> {arrive_airport}: id={idNum}')
