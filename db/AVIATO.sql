@@ -74,9 +74,9 @@ CREATE TABLE `bank`(
 CREATE TABLE `bid`(
     `bidID` varchar(50) NOT NULL,
     `submit` boolean NOT NULL,
-    `expirationDate` DATETIME NOT NULL,
+    `expirationDate` varchar(50) NOT NULL,
     `status` VARCHAR(255) NOT NULL,
-    `buyerID` varchar(50) NOT NULL,
+    `buyerID` varchar(50),
     `trade_ID` varchar(50) NOT NULL,
     PRIMARY KEY (`bidID`),
     CONSTRAINT `bid_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyerID` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
@@ -84,10 +84,10 @@ CREATE TABLE `bid`(
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `trade`(
-    `trade_ID` varchar(50) NOT NULL,
-    `date` DATETIME NOT NULL,
+    `trade_ID` varchar(50) ,
+    `date` varchar(50),
     `price` VARCHAR(255) NOT NULL,
-    `buyerID` varchar(50) NOT NULL,
+    `buyerID` varchar(50),
     `sellerID` varchar(50) NOT NULL,
     PRIMARY KEY (`trade_ID`),
     CONSTRAINT `trade_ibfk_1` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
@@ -129,8 +129,7 @@ CREATE TABLE `flights`(
     CONSTRAINT `flights_ibfk_2` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `flights_ibfk_3` FOREIGN KEY (`buyerID`) REFERENCES `buyer` (`buyerID`) ON UPDATE cascade ON DELETE restrict,
     CONSTRAINT `flights_ibfk_4` FOREIGN KEY (`portfolioID`) REFERENCES `flights_portfolio` (`portfolioID`) ON UPDATE cascade ON DELETE restrict,
-    CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict,
-    CONSTRAINT `flights_ibfk_6` FOREIGN KEY (`trade_ID`) REFERENCES `trade` (`trade_ID`) ON UPDATE cascade ON DELETE restrict
+    CONSTRAINT `flights_ibfk_5` FOREIGN KEY (`adminID`) REFERENCES `admin` (`adminID`) ON UPDATE cascade ON DELETE restrict
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `flight_portfolio` (

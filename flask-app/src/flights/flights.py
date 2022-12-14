@@ -39,42 +39,58 @@ def add_flight(user_ID, portfolioID):
     current_app.logger.info(request.form)
     cursor = db.get_db().cursor()
 
-    date_purchased: str = request.form['date_purchased']
+    date_purchased = str(request.form['date_purchased'])
     airline = request.form['airline']
     arrive_airport = request.form['arrive_airport']
     depart_airport = request.form['depart_airport']
 
-    country = request.form['country']
-    continent = request.form['continent']
     is_layover = request.form['is_layover']
-    airport_code = request.form['airport_code']
+    if is_layover == 'true' or is_layover:
+        is_layover=1
+    else:
+        is_layover=0
     purchased_price = request.form['purchased_price']
     current_price = request.form['current_price']
     asking_price = request.form['asking_price']
     for_sale = request.form['for_sale']
+    if for_sale == 'true' or for_sale:
+        for_sale=1
+    else:
+        for_sale=0
     takeoff = request.form['takeoff']
     land = request.form['land']
-    # date_posted = datetime TODO
+    date_posted = datetime.date.today()
+
+    airline_message = request.form['airline_message']
 
     special_requests = request.form['special_requests']
-    """
-        # "adminID": "60",
-
-        # "bidID": "83",
-        # "buyerID": "63",
-        # "datePosted": "Sun, 09 Jan 2022 18:37:43 GMT",
-        # "portfolioID": "93",
-        # "trade_ID": "47",
-        # "tripID": "22"
-    """
 
     idNum: int = random.randint(100,100000)
+    # trade add
+    insert_stmt_trade = (f" INSERT INTO trade (trade_ID, date, price, buyerID, sellerID)"
+                        "VALUES (%s, %s, %s, %s, %s)"
+    )
+    tradeID = random.randint(100,100000)
+    trade_data: tuple = (tradeID, datetime.date.today(), asking_price, user_ID, user_ID)
+    cursor.execute(insert_stmt_trade, trade_data)
+    db.get_db().commit()
 
+    # bid add
+
+    insert_stmt_bid= (f" INSERT INTO bid (bidID, submit, expirationDate, status, buyerID, trade_ID)"
+                        "VALUES (%s, %s, %s, %s, %s, %s)"
+    )
+    exp_date = datetime.date.today().year + 1
+    bid_data: tuple = (random.randint(100,100000), 0, exp_date, 0, user_ID, tradeID)
+    cursor.execute(insert_stmt_bid, bid_data)
+    db.get_db().commit()
+
+    # flight add
     insert_stmt: str = (
                         f" INSERT INTO flights (tripID, for_sale, datePosted, airline_message, special_requests, bidID, trade_ID, buyerID, portfolioID, adminID, date_purchased, airline, is_layover, depart_airport, arrive_airport, purchased_price, current_price, asking_price, takeoff, land)"
                         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         )
-    data: tuple = (idNum, for_sale, )
+    data: tuple = (idNum, for_sale, date_posted,  airline_message, special_requests, ' ', ' ', user_ID, portfolioID, ' ', date_purchased, airline, is_layover, depart_airport, arrive_airport, purchased_price, current_price, asking_price, takeoff, land)
     cursor.execute(insert_stmt, data)
     db.get_db().commit()
     return (f'<h1>Added new flight: {airline} {depart_airport} -> {arrive_airport}: id={idNum}')
