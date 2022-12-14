@@ -19,7 +19,7 @@ construct an OAuth backend to integrate with airline and bank
 accounts.
 
 ## Current Working Build
-The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login or create an account, view their profile, add flights to their profile, and browse flights on the marketplace. Applicaiton adminstrator are able to view user account information, purchase histories, and transaction information. 
+The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login (with non-implemented backend functionality to create an account), view their profile, add flights to their profile, and browse flights on the marketplace. Applicaiton adminstrator are able to view user purchase histories and transaction information. 
 
 ## How to setup and start the backend
 
