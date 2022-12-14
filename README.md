@@ -19,10 +19,11 @@ construct an OAuth backend to integrate with airline and bank
 accounts.
 
 ## Current Working Build
-The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login (with non-implemented backend functionality to create an account), view their profile, add flights to their profile, and browse flights on the marketplace. App adminstrator are able to view user purchase histories and transaction information. 
+The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login (with non-implemented backend functionality to create an account), view their profile, add flights to their profile, and browse flights on the marketplace. App adminstrators are able to view user purchase histories and transaction information. 
 
 
 ## Demo Video
+Note: any AppSmith errors during the video or other user testing might result from the need to generate a new nGrok token
 
 [Aviato Demo Video]()
 
