@@ -25,7 +25,7 @@ The application currently supports a MVP-build of Aviato - not yet with full tra
 ## Demo Video
 Note: any AppSmith errors during the video or other user testing might result from the need to generate a new nGrok token
 
-[Aviato Demo Video]()
+[Aviato Demo Video](https://northeastern-my.sharepoint.com/:v:/g/personal/reicher_b_northeastern_edu/EQ0801812UhOiGMoSUUL6FgBEFaVs9UazHIE21X-AZhAAw?e=AZgfBO)
 
 
 ## How to setup and start the backend
