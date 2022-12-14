@@ -1,6 +1,6 @@
 # Aviato - A Marketplace for Airline Ticket Resale
 
-Aviato is an online trading platform & marketplace, indented to act as
+Aviato is an online trading platform & marketplace for airline tickets, indented to act as
 a Google Flights + StubHub hybrid. As a frequent flyer myself, I
 understand the chaos of flight prices. For example, a roundtrip December 2022 flight from New
 York (JFK) to San Francisco (SFO) has increased over $250 in the
@@ -19,7 +19,13 @@ construct an OAuth backend to integrate with airline and bank
 accounts.
 
 ## Current Working Build
-The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login (with non-implemented backend functionality to create an account), view their profile, add flights to their profile, and browse flights on the marketplace. Applicaiton adminstrator are able to view user purchase histories and transaction information. 
+The application currently supports a MVP-build of Aviato - not yet with full trading functionality. Here, users are able to login (with non-implemented backend functionality to create an account), view their profile, add flights to their profile, and browse flights on the marketplace. App adminstrator are able to view user purchase histories and transaction information. 
+
+
+## Demo Video
+
+[Aviato Demo Video]()
+
 
 ## How to setup and start the backend
 
