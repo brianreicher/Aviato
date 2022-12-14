@@ -43,7 +43,7 @@ def get_specific_flight(airline_name, dep_airport, arrive_airport):
         airline_name = 'Hawaiian Airlines'
     if airline_name == 'AlaskanAirlines':
         airline_name = 'Alaskan Airlines'
-    # if airline_name == ''
+    
     if dep_airport.lower() == 'all' and arrive_airport.lower() != 'all':
         cursor.execute(f'select * from flights where airline=\'{airline_name}\' and arrive_airport=\'{arrive_airport}\'')
 

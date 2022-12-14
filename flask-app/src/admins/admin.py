@@ -9,7 +9,7 @@ admin = Blueprint('admins', __name__)
 @admin.route('/admins', methods=['GET'])
 def get_admins():
     cursor = db.get_db().cursor()
-    cursor.execute('select adminID as value, lastName as label from admin')
+    cursor.execute('select adminID as value, adminID as label from admin')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
