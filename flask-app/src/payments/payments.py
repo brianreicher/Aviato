@@ -12,7 +12,7 @@ payments = Blueprint('payments', __name__)
 @payments.route('/payments', methods=['GET'])
 def get_payments():
     cursor = db.get_db().cursor()
-    cursor.execute('select * from payment')
+    cursor.execute('select * from payment ORDER BY paymentID ASC')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -25,11 +25,11 @@ def get_payments():
 
 
 # Get all payments associated with a given user
-@payments.route('/payments/<sellerID>', methods=['GET'])
-def get_user_payments(sellerID):
+@payments.route('/payments/<adminID>', methods=['GET'])
+def get_user_payments(adminID):
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-    cursor.execute(f'SELECT * from payment where sellerID={sellerID}')
+    cursor.execute(f'SELECT paymentNum, bankaccount_ID, amount, types, sellerID, buyerID, bidID from payment where adminID ={adminID} ORDER BY adminID')
 
     column_headers = [x[0] for x in cursor.description]
 

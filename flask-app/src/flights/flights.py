@@ -90,9 +90,9 @@ def add_flight(user_ID, portfolioID):
         is_layover=1
     else:
         is_layover=0
-    purchased_price = '$' + request.form['purchased_price']
-    current_price = '$' + request.form['current_price']
-    asking_price = '$' + request.form['asking_price']
+    purchased_price = request.form['purchased_price']
+    current_price = request.form['current_price']
+    asking_price = request.form['asking_price']
     for_sale = request.form['for_sale']
     if for_sale == 'true' or for_sale:
         for_sale=1
@@ -120,6 +120,8 @@ def add_flight(user_ID, portfolioID):
     insert_stmt_bid= (f" INSERT INTO bid (bidID, submit, expirationDate, status, buyerID, trade_ID)"
                         "VALUES (%s, %s, %s, %s, %s, %s)"
     )
+
+    # set expirationDate
     exp_date = datetime.date.today().year + 1
     bid_id = random.randint(101,100000)
     bid_data: tuple = (bid_id, 0, exp_date, 0, user_ID, tradeID)
@@ -153,7 +155,7 @@ def add_flight(user_ID, portfolioID):
 def get_user_flights(buyer_ID):
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-    cursor.execute(f'select * from flights where buyerID={buyer_ID}')
+    cursor.execute(f'select airline, takeoff, land, depart_airport, arrive_airport, is_layover, purchased_price, current_price, asking_price ,adminID from flights where buyerID={buyer_ID}')
 
     column_headers = [x[0] for x in cursor.description]
 

@@ -78,9 +78,25 @@ def get_portfolios(userID):
     the_response.mimetype = 'application/json'
     return the_response
 
-# shows all users for login
+# shows all users for login with portfolios DROPDOWN
 @users.route('/users/login-user')
 def get_logins():
+    cursor = db.get_db().cursor()
+    cursor.execute('select  distinct userID as label, userID as value from flight_portfolio')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+
+# shows all users for login with flights DROPDOWN
+@users.route('/users/login-user-profile')
+def get_user_profile_nums():
     cursor = db.get_db().cursor()
     cursor.execute('select userID as label, userID as value from user')
     row_headers = [x[0] for x in cursor.description]
